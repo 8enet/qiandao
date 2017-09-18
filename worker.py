@@ -14,6 +14,7 @@ from tornado import gen
 
 import config
 from libs import utils
+from libs import ifttt
 from libs.fetcher import Fetcher
 
 logger = logging.getLogger('qiandao.worker')
@@ -181,6 +182,8 @@ class MainWorker(object):
                     next=next)
             self.db.tpl.incr_success(tpl['id'])
 
+            ifttt.notify_web(task, tpl)
+
             logger.info('taskid:%d tplid:%d successed! %.4fs', task['id'], task['tplid'], time.time()-start)
         except Exception as e:
             # failed feedback
@@ -191,7 +194,9 @@ class MainWorker(object):
             else:
                 disabled = True
                 next = None
-
+            
+            ifttt.notify_web(task, tpl, e)
+            
             self.db.tasklog.add(task['id'], success=False, msg=unicode(e))
             self.db.task.mod(task['id'],
                     last_failed=time.time(),

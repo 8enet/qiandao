@@ -9,6 +9,7 @@ import json
 import time
 from tornado import gen
 
+from libs import ifttt
 from base import *
 
 class TaskNewHandler(BaseHandler):
@@ -109,10 +110,12 @@ class TaskRunHandler(BaseHandler):
         try:
             new_env = yield self.fetcher.do_fetch(fetch_tpl, env)
         except Exception as e:
+            ifttt.notify_web(task, tpl, e)
             self.db.tasklog.add(task['id'], success=False, msg=unicode(e))
             self.finish('<h1 class="alert alert-danger text-center">签到失败</h1><div class="well">%s</div>' % e)
             return
-
+        
+        ifttt.notify_web(task, tpl)
         self.db.tasklog.add(task['id'], success=True, msg=new_env['variables'].get('__log__'))
         self.db.task.mod(task['id'],
                 disabled = False,

@@ -17,6 +17,8 @@ https = bool(os.getenv('ENABLE_HTTPS', False))
 cookie_days = 5
 mysql_url = urlparse.urlparse(os.getenv('JAWSDB_MARIA_URL', ''))
 redis_url = urlparse.urlparse(os.getenv('REDISCLOUD_URL', ''))
+ifttt_key = ''
+ifttt_event = ''
 
 class mysql(object):
     host = mysql_url.hostname or 'localhost'
