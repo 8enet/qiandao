@@ -53,6 +53,7 @@ domain = 'qiandao.today'
 mail_smtp = ""
 mail_user = ""
 mail_password = ""
+mail_tls = False
 mail_domain = "mail.qiandao.today"
 mailgun_key = ""
 

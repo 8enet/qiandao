@@ -183,8 +183,14 @@ def _send_mail(to, subject, text=None, subtype='html'):
     msg['To'] = to
     try:
         logger.info('send mail to {}'.format(to))
-        s = smtplib.SMTP()
-        s.connect(config.mail_smtp)
+        s = None
+        if config.mail_tls:
+            s = smtplib.SMTP(config.mail_smtp)
+            s.starttls()
+        else:
+            s = smtplib.SMTP()
+            s.connect(config.mail_smtp)
+        
         s.login(config.mail_user, config.mail_password)
         s.sendmail(config.mail_user, to, msg.as_string())
         s.close()
