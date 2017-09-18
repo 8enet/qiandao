@@ -94,7 +94,7 @@ class TaskRunHandler(BaseHandler):
         user = self.current_user
         task = self.check_permission(self.db.task.get(taskid, fields=('id', 'tplid', 'userid', 'init_env',
             'env', 'session', 'last_success', 'last_failed', 'success_count',
-            'failed_count', 'last_failed_count', 'next', 'disabled')), 'w')
+            'failed_count', 'last_failed_count', 'next', 'disabled', 'note')), 'w')
 
         tpl = self.check_permission(self.db.tpl.get(task['tplid'], fields=('id', 'userid', 'sitename',
             'siteurl', 'tpl', 'interval', 'last_success')))
